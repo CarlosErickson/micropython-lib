@@ -33,6 +33,8 @@ import struct
 from time import sleep
 
 from micropython import const
+from machine import SoftSPI
+
 
 
 try:
@@ -517,15 +519,15 @@ class Adafruit_BMP280_SPI(Adafruit_BMP280):
 
     """
 
-    def __init__(self, spi: SPI, baudrate=100000) -> None:
+    def __init__(self, spi: SoftSPI) -> None:
         '''from adafruit_bus_device import (  # pylint: disable=import-outside-toplevel
             spi_device,
         )'''
-        from machine import SoftSPI
+
 
 
         #self._spi = spi_device.SPIDevice(spi, cs, baudrate=baudrate)
-        self._spi = SoftSPI()
+        self._spi = spi
 
         super().__init__()
 
