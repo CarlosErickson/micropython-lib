@@ -464,7 +464,7 @@ class Adafruit_BMP280_I2C(Adafruit_BMP280):  # pylint: disable=invalid-name
         with self._i2c as i2c:
             i2c.write(bytes([register & 0xFF]))
             result = bytearray(length)
-            i2c.readinto(result)
+            i2c.readinto(result) # FIX: talvez substituir por readfrom_into()
             # print("$%02X => %s" % (register, [hex(i) for i in result]))
             return result
 
