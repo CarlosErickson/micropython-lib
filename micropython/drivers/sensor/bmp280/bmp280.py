@@ -450,12 +450,13 @@ class Adafruit_BMP280_I2C(Adafruit_BMP280):  # pylint: disable=invalid-name
 
     """
 
-    def __init__(self, i2c: SoftI2C) -> None:
+    def __init__(self, i2c: SoftI2C, address: int = 0x77) -> None:
         '''from adafruit_bus_device import (  # pylint: disable=import-outside-toplevel
             i2c_device,
         )'''
 
         self._i2c = i2c
+        self.address = address
         #self._i2c = i2c_device.I2CDevice(i2c, address)
         super().__init__()
 
@@ -464,14 +465,14 @@ class Adafruit_BMP280_I2C(Adafruit_BMP280):  # pylint: disable=invalid-name
         with self._i2c as i2c:
             i2c.write(bytes([register & 0xFF]))
             result = bytearray(length)
-            i2c.readinto(result) # FIX: talvez substituir por readfrom_into()
+            i2c.readfrom_into(self.address, result)
             # print("$%02X => %s" % (register, [hex(i) for i in result]))
             return result
 
     def _write_register_byte(self, register: int, value: int) -> None:
         """Low level register writing over I2C, writes one 8-bit value"""
         with self._i2c as i2c:
-            i2c.write(bytes([register & 0xFF, value & 0xFF]))
+            i2c.writeto(self.address, bytes([register & 0xFF, value & 0xFF]))
             # print("$%02X <= 0x%02X" % (register, value))
 
 
