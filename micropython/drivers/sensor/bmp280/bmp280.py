@@ -33,7 +33,7 @@ import struct
 from time import sleep
 
 from micropython import const
-from machine import SoftSPI
+from machine import SoftSPI, SoftI2C
 
 
 
@@ -450,12 +450,13 @@ class Adafruit_BMP280_I2C(Adafruit_BMP280):  # pylint: disable=invalid-name
 
     """
 
-    def __init__(self, i2c: I2C, address: int = 0x77) -> None:
-        from adafruit_bus_device import (  # pylint: disable=import-outside-toplevel
+    def __init__(self, i2c: SoftI2C) -> None:
+        '''from adafruit_bus_device import (  # pylint: disable=import-outside-toplevel
             i2c_device,
-        )
+        )'''
 
-        self._i2c = i2c_device.I2CDevice(i2c, address)
+        self._i2c = i2c
+        #self._i2c = i2c_device.I2CDevice(i2c, address)
         super().__init__()
 
     def _read_register(self, register: int, length: int) -> bytearray:
